@@ -182,7 +182,7 @@
      const pdfButton = modal.locator('button').filter({ hasText: /^PDF$/ }).first();
      const [download] = await Promise.all([
      page.waitForEvent('download', { timeout: 60000 }),
-     pdfButton.click(),
+     pdfButton.click({ timeout: 60000 }),
      ]);
      const stream = await download.createReadStream();
      const filename = `TAG_${formatYYYYMMDD(fromDate)}-${formatYYYYMMDD(toDate)}_${plate}.pdf`;
