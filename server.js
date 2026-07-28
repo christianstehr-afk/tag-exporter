@@ -121,8 +121,9 @@
 
      app.get('/api/patentes', async (req, res) => {
      try {
+     let page;
      const result = await enqueue(async () => {
-     const page = await getAuthenticatedPage();
+     page = await getAuthenticatedPage();
      const patentes = await page.$$eval('table tbody tr', (rows) =>
      rows
      .map((r) => {
@@ -142,6 +143,7 @@
      });
      res.json(result);
      } catch (err) {
+       if (page) await page.close().catch(() => {});
      console.error('[api/patentes] error:', err);
      res.status(500).json({ error: String(err.message || err) });
      }
@@ -161,8 +163,9 @@
      return res.status(400).json({ error: 'Rango de fechas invalido.' });
      }
      try {
+     let page;
      await enqueue(async () => {
-     const page = await getAuthenticatedPage();
+     page = await getAuthenticatedPage();
      await setDateRange(page, fromDate, toDate);
      await uncheckMapaIfNeeded(page);
      res.attachment(`TAG_${formatYYYYMMDD(fromDate)}-${formatYYYYMMDD(toDate)}.zip`);
@@ -202,6 +205,7 @@
      await page.close();
      });
      } catch (err) {
+       if (page) await page.close().catch(() => {});
      console.error('[api/export] error:', err);
      if (!res.headersSent) {
      res.status(500).json({ error: String(err.message || err) });
