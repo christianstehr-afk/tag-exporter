@@ -75,7 +75,7 @@
      }
 
      async function togglePlate(page, plate) {
-     const row = page.locator('table tbody tr').filter({ hasText: new RegExp(`\\b${plate}\\b`) });
+     const row = page.locator('table tbody tr').filter({ hasText: new RegExp(`\\b${plate}`) });
      await row.locator('.q-checkbox').first().click();
      }
 
