@@ -198,6 +198,12 @@
      await closeBtn.click({ timeout: 5000 }).catch(() => {});
      } catch (plateErr) {
      console.error(`[export] ${plate} fallo:`, plateErr);
+     try {
+       const shot = await page.screenshot({ fullPage: true });
+       archive.append(shot, { name: `TAG_${plate}_DEBUG.png` });
+     } catch (shotErr) {
+       console.error(`[export] no se pudo capturar screenshot de ${plate}:`, shotErr);
+     }
      archive.append(String(plateErr.message || plateErr), { name: `TAG_${plate}_ERROR.txt` });
      }
      }
