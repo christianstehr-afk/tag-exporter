@@ -180,9 +180,13 @@
      const modal = page.locator('.q-dialog--modal');
      await modal.waitFor({ state: 'visible', timeout: 30000 });
      const pdfButton = modal.locator('button').filter({ hasText: /^PDF$/ }).first();
+     await pdfButton.click({ timeout: 30000 });
+     const notif = page.locator('.q-notification.custom-notify-report').last();
+     await notif.waitFor({ state: 'visible', timeout: 60000 });
+     const descargarBtn = notif.locator('button').filter({ hasText: /^Descargar$/ }).first();
      const [download] = await Promise.all([
-     page.waitForEvent('download', { timeout: 60000 }),
-     pdfButton.click({ timeout: 60000 }),
+       page.waitForEvent('download', { timeout: 30000 }),
+       descargarBtn.click(),
      ]);
      const stream = await download.createReadStream();
      const filename = `TAG_${formatYYYYMMDD(fromDate)}-${formatYYYYMMDD(toDate)}_${plate}.pdf`;
