@@ -38,9 +38,9 @@
      throw new Error('Faltan las variables de entorno SR_USER / SR_PASS');
      }
      await page.goto(`${BASE_URL}/login`, { waitUntil: 'networkidle' });
-     await page.waitForSelector('input[placeholder="Ingresa tu usuario"]', { timeout: 20000 });
-     await page.fill('input[placeholder="Ingresa tu usuario"]', SR_USER);
-     await page.fill('input[placeholder="Ingresa tu contraseña"]', SR_PASS);
+     await page.waitForSelector('input[aria-label="Ingresa tu usuario"]', { timeout: 20000 });
+     await page.fill('input[aria-label="Ingresa tu usuario"]', SR_USER);
+     await page.fill('input[aria-label="Ingresa tu contraseña"]', SR_PASS);
      await page.locator('button', { hasText: /^ENTRAR$/i }).click();
      await page.waitForURL('**/dashboard', { timeout: 20000 });
      console.log('[login] sesion iniciada.');
