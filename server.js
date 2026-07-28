@@ -178,9 +178,9 @@
      lastPlate = plate;
      await page.locator('button.lupa').click();
      const modal = page.locator('.q-dialog--modal');
-     await modal.waitFor({ state: 'visible', timeout: 30000 });
+     await modal.waitFor({ state: 'visible', timeout: 90000 });
      const pdfButton = modal.locator('button').filter({ hasText: /^PDF$/ }).first();
-     await pdfButton.click({ timeout: 30000 });
+     await pdfButton.click({ timeout: 90000 });
      const notif = page.locator('.q-notification.custom-notify-report').last();
      await notif.waitFor({ state: 'visible', timeout: 60000 });
      const descargarBtn = notif.locator('button').filter({ hasText: /^Descargar$/ }).first();
