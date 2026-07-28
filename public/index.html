@@ -1,161 +1,155 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TAG por patente - e-auto</title>
-  <style>
-    :root { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { margin: 0; background: #f4f4f6; color: #222; }
-    header { background: #c9184a; color: #fff; padding: 20px 24px; }
-    header h1 { margin: 0; font-size: 20px; }
-    main { max-width: 640px; margin: 24px auto; padding: 0 16px; }
-    .card { background: #fff; border-radius: 10px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); margin-bottom: 16px; }
-    .card h2 { margin-top: 0; font-size: 16px; }
-    .dates { display: flex; gap: 12px; flex-wrap: wrap; }
-    .dates label { font-size: 13px; color: #555; display: flex; flex-direction: column; gap: 4px; }
-    input[type="date"] { padding: 8px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
-    .patente-list { display: flex; flex-direction: column; gap: 2px; max-height: 340px; overflow-y: auto; border: 1px solid #eee; border-radius: 8px; }
-    .patente-row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-bottom: 1px solid #f0f0f0; }
-    .patente-row:last-child { border-bottom: none; }
-    .patente-row input { width: 18px; height: 18px; }
-    .patente-row .plate { font-weight: 600; }
-    .patente-row .meta { color: #888; font-size: 12px; }
-    .select-actions { display: flex; gap: 12px; margin: 10px 0; font-size: 13px; }
-    .select-actions a { color: #c9184a; cursor: pointer; text-decoration: underline; }
-    button.export {
-      background: #c9184a; color: #fff; border: none; border-radius: 8px;
-      padding: 12px 18px; font-size: 15px; font-weight: 600; cursor: pointer; width: 100%;
-    }
-    button.export:disabled { background: #e0a3b6; cursor: not-allowed; }
-    .status { margin-top: 12px; font-size: 14px; }
-    .status.error { color: #c9184a; }
-    .status.ok { color: #2e7d32; }
-    .loading { display: none; margin-top: 10px; font-size: 13px; color: #666; }
-    </style>
-  </head>
-  <body>
-    <header><h1>TAG por patente - e-auto</h1></header>
-  <main>
-    <div class="card">
-      <h2>Rango de fechas</h2>
-      <div class="dates">
-        <label>Desde <input type="date" id="fromDate" /></label>
-      <label>Hasta <input type="date" id="toDate" /></label>
-      </div>div>
-    </div>div>
-  
-  <div class="card">
-  <h2>Patentes</h2>
-  <div class="select-actions">
-  <a id="selectAll">Seleccionar todas</a>a>
-  <a id="selectNone">Ninguna</a>a>
-  </div>div>
-  <div class="patente-list" id="patenteList">Cargando patentes...</div>div>
-  </div>div>
-  
-  <button class="export" id="exportBtn">Exportar PDF por patente</button>button>
-  <div class="loading" id="loading">Generando reportes, puede tardar unos minutos...</div>div>
-  <div class="status" id="status"></div>div>
-  </main>
-  
-  <script>
-    const patenteList = document.getElementById('patenteList');
-    const exportBtn = document.getElementById('exportBtn');
-    const statusEl = document.getElementById('status');
-    const loadingEl = document.getElementById('loading');
-    const fromInput = document.getElementById('fromDate');
-    const toInput = document.getElementById('toDate');
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TAG por patente - e-auto</title>
+<style>
+:root { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+body { margin: 0; background: #f4f4f6; color: #222; }
+header { background: #c9184a; color: #fff; padding: 20px 24px; }
+header h1 { margin: 0; font-size: 20px; }
+main { max-width: 640px; margin: 24px auto; padding: 0 16px; }
+.card { background: #fff; border-radius: 10px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); margin-bottom: 16px; }
+.card h2 { margin-top: 0; font-size: 16px; }
+.dates { display: flex; gap: 12px; flex-wrap: wrap; }
+.dates label { font-size: 13px; color: #555; display: flex; flex-direction: column; gap: 4px; }
+input[type="date"] { padding: 8px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
+.patente-list { display: flex; flex-direction: column; gap: 2px; max-height: 340px; overflow-y: auto; border: 1px solid #eee; border-radius: 8px; }
+.patente-row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-bottom: 1px solid #f0f0f0; }
+.patente-row:last-child { border-bottom: none; }
+.patente-row input { width: 18px; height: 18px; }
+.patente-row .plate { font-weight: 600; }
+.patente-row .meta { color: #888; font-size: 12px; }
+.select-actions { display: flex; gap: 12px; margin: 10px 0; font-size: 13px; }
+.select-actions a { color: #c9184a; cursor: pointer; text-decoration: underline; }
+button.export {
+background: #c9184a; color: #fff; border: none; border-radius: 8px;
+padding: 12px 18px; font-size: 15px; font-weight: 600; cursor: pointer; width: 100%;
+}
+button.export:disabled { background: #e0a3b6; cursor: not-allowed; }
+.status { margin-top: 12px; font-size: 14px; }
+.status.error { color: #c9184a; }
+.status.ok { color: #2e7d32; }
+.loading { display: none; margin-top: 10px; font-size: 13px; color: #666; }
+</style>
+</head>
+<body>
+<header><h1>TAG por patente - e-auto</h1></header>
+<main>
+<div class="card">
+<h2>Rango de fechas</h2>
+<div class="dates">
+<label>Desde <input type="date" id="fromDate" /></label>
+<label>Hasta <input type="date" id="toDate" /></label>
+</div>
+</div>
 
-    function todayStr() {
-      return new Date().toISOString().slice(0, 10);
-    }
-    function daysAgoStr(n) {
-      const d = new Date();
-      d.setDate(d.getDate() - n);
-      return d.toISOString().slice(0, 10);
-    }
-    fromInput.value = daysAgoStr(7);
-    toInput.value = todayStr();
+<div class="card">
+<h2>Patentes</h2>
+<div class="select-actions">
+<a id="selectAll">Seleccionar todas</a>
+<a id="selectNone">Ninguna</a>
+</div>
+<div class="patente-list" id="patenteList">Cargando patentes...</div>
+</div>
 
-    async function loadPatentes() {
-      try {
-        const res = await fetch('/api/patentes');
-        if (!res.ok) throw new Error((await res.json()).error || 'Error al listar patentes');
-        const patentes = await res.json();
-        if (!patentes.length) {
-          patenteList.innerHTML = '<div class="patente-row">No se encontraron patentes.</div>';
-          return;
-        }
-        patenteList.innerHTML = patentes.map((p, i) => `
-        <label class="patente-row">
-        <input type="checkbox" value="${p.plate}" class="patente-check" id="p${i}" />
-        <span class="plate">${p.plate}</span>
-        <span class="meta">${p.brand || ''} ${p.color || ''} ${p.year || ''}</span>
-        </label>
-        `).join('');
-      } catch (err) {
-        patenteList.innerHTML = `<div class="patente-row">Error cargando patentes: ${err.message}</div>`;
-      }
-    }
+<button class="export" id="exportBtn">Exportar PDF por patente</button>
+<div class="loading" id="loading">Generando reportes, puede tardar unos minutos...</div>
+<div class="status" id="status"></div>
+</main>
 
-    document.getElementById('selectAll').onclick = () => {
-      document.querySelectorAll('.patente-check').forEach(c => c.checked = true);
-    };
-    document.getElementById('selectNone').onclick = () => {
-      document.querySelectorAll('.patente-check').forEach(c => c.checked = false);
-    };
+<script>
+const patenteList = document.getElementById('patenteList');
+const exportBtn = document.getElementById('exportBtn');
+const statusEl = document.getElementById('status');
+const loadingEl = document.getElementById('loading');
+const fromInput = document.getElementById('fromDate');
+const toInput = document.getElementById('toDate');
 
-    exportBtn.onclick = async () => {
-      const selected = Array.from(document.querySelectorAll('.patente-check:checked')).map(c => c.value);
-      statusEl.textContent = '';
-      statusEl.className = 'status';
-      if (!selected.length) {
-        statusEl.textContent = 'Selecciona al menos una patente.';
-        statusEl.className = 'status error';
-        return;
-      }
-      exportBtn.disabled = true;
-      loadingEl.style.display = 'block';
-      try {
-        const res = await fetch('/api/export', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ plates: selected, from: fromInput.value, to: toInput.value }),
-        });
-        if (!res.ok) {
-          const err = await res.json().catch(() => ({}));
-          throw new Error(err.error || 'Error al exportar');
-        }
-        const blob = await res.blob();
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        const disposition = res.headers.get('Content-Disposition') || '';
-        const match = disposition.match(/filename="?([^"]+)"?/);
-        a.download = match ? match[1] : 'TAG_export.zip';
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        URL.revokeObjectURL(url);
-        statusEl.textContent = 'Listo. Descarga iniciada.';
-        statusEl.className = 'status ok';
-      } catch (err) {
-        statusEl.textContent = err.message;
-        statusEl.className = 'status error';
-      } finally {
-        exportBtn.disabled = false;
-        loadingEl.style.display = 'none';
-      }
-    };
+function todayStr() {
+return new Date().toISOString().slice(0, 10);
+}
+function daysAgoStr(n) {
+const d = new Date();
+d.setDate(d.getDate() - n);
+return d.toISOString().slice(0, 10);
+}
+fromInput.value = daysAgoStr(7);
+toInput.value = todayStr();
 
-    loadPatentes();
-  </script>
-  </body>
+async function loadPatentes() {
+try {
+const res = await fetch('/api/patentes');
+if (!res.ok) throw new Error((await res.json()).error || 'Error al listar patentes');
+const patentes = await res.json();
+if (!patentes.length) {
+patenteList.innerHTML = '<div class="patente-row">No se encontraron patentes.</div>';
+return;
+}
+patenteList.innerHTML = patentes.map((p, i) => `
+<label class="patente-row">
+<input type="checkbox" value="${p.plate}" class="patente-check" id="p${i}" />
+<span class="plate">${p.plate}</span>
+<span class="meta">${p.brand || ''} ${p.color || ''} ${p.year || ''}</span>
+</label>
+`).join('');
+} catch (err) {
+patenteList.innerHTML = `<div class="patente-row">Error cargando patentes: ${err.message}</div>`;
+}
+}
+
+document.getElementById('selectAll').onclick = () => {
+document.querySelectorAll('.patente-check').forEach(c => c.checked = true);
+};
+document.getElementById('selectNone').onclick = () => {
+document.querySelectorAll('.patente-check').forEach(c => c.checked = false);
+};
+
+exportBtn.onclick = async () => {
+const selected = Array.from(document.querySelectorAll('.patente-check:checked')).map(c => c.value);
+statusEl.textContent = '';
+statusEl.className = 'status';
+if (!selected.length) {
+statusEl.textContent = 'Selecciona al menos una patente.';
+statusEl.className = 'status error';
+return;
+}
+exportBtn.disabled = true;
+loadingEl.style.display = 'block';
+try {
+const res = await fetch('/api/export', {
+method: 'POST',
+headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify({ plates: selected, from: fromInput.value, to: toInput.value }),
+});
+if (!res.ok) {
+const err = await res.json().catch(() => ({}));
+throw new Error(err.error || 'Error al exportar');
+}
+const blob = await res.blob();
+const url = URL.createObjectURL(blob);
+const a = document.createElement('a');
+a.href = url;
+const disposition = res.headers.get('Content-Disposition') || '';
+const match = disposition.match(/filename="?([^"]+)"?/);
+a.download = match ? match[1] : 'TAG_export.zip';
+document.body.appendChild(a);
+a.click();
+a.remove();
+URL.revokeObjectURL(url);
+statusEl.textContent = 'Listo. Descarga iniciada.';
+statusEl.className = 'status ok';
+} catch (err) {
+statusEl.textContent = err.message;
+statusEl.className = 'status error';
+} finally {
+exportBtn.disabled = false;
+loadingEl.style.display = 'none';
+}
+};
+
+loadPatentes();
+</script>
+</body>
 </html>
-
-  </script></label></label>
-  </main></h1></header>
-  </body>
-  </style></title>
-  </head>
