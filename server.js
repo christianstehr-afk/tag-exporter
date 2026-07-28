@@ -89,12 +89,12 @@
      const monthOverlay = menu.locator('.dp__overlay').last();
      await monthOverlay.waitFor({ state: 'visible', timeout: 5000 });
      const monthIndex = targetDate.getMonth() + 1;
-     await monthOverlay.locator('.dp__overlay_cell').nth(monthIndex - 1).click();
+     await monthOverlay.locator('.dp__overlay_cell, .dp__overlay_cell_active').nth(monthIndex - 1).click();
      await monthYearSelects.nth(1).click();
      const yearOverlay = menu.locator('.dp__overlay').last();
      await yearOverlay.waitFor({ state: 'visible', timeout: 5000 });
      const yearText = String(targetDate.getFullYear());
-     await yearOverlay.locator('.dp__overlay_cell').filter({ hasText: new RegExp(`^${yearText}$`) }).first().click();
+     await yearOverlay.locator('.dp__overlay_cell, .dp__overlay_cell_active').filter({ hasText: new RegExp(`^${yearText}$`) }).first().click();
      const day = String(targetDate.getDate());
      const dayCells = menu.locator('.dp__cell_inner:not(.dp__cell_offset)').filter({ hasText: new RegExp(`^${day}$`) });
      await dayCells.first().click();
