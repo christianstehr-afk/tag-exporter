@@ -102,6 +102,7 @@
      if (await selectBtn.count().catch(() => 0)) {
      await selectBtn.click().catch(() => {});
      }
+     await menu.waitFor({ state: 'hidden', timeout: 5000 }).catch(() => {});
      }
 
      async function setDateRange(page, fromDate, toDate) {
