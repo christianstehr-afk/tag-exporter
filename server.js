@@ -197,7 +197,14 @@
        if (await aceptarBtn2.count().catch(() => 0)) {
          await aceptarBtn2.click({ timeout: 2000 }).catch(() => {});
        }
-       modalVisible = await modal.isVisible().catch(() => false);
+       modalVisible = await page.evaluate(() => {
+         const modals = Array.from(document.querySelectorAll('.q-dialog--modal'));
+         return modals.some((m) => {
+           const hasPdf = Array.from(m.querySelectorAll('button')).some((b) => b.textContent.trim() === 'PDF');
+           const visible = !!(m.offsetWidth || m.offsetHeight || m.getClientRects().length);
+           return hasPdf && visible;
+         });
+       }).catch(() => false);
        if (!modalVisible) await page.waitForTimeout(1500);
      }
      if (!modalVisible) throw new Error('Modal del reporte no se hizo visible a tiempo');
