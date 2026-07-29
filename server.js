@@ -191,7 +191,16 @@
           await page.waitForTimeout(1000);
         }
      const modal = page.locator('.q-dialog--modal').filter({ has: page.locator('button', { hasText: /^PDF$/ }) }).first();
-     await modal.waitFor({ state: 'visible', timeout: 90000 });
+     let modalVisible = false;
+     for (let i = 0; i < 60 && !modalVisible; i++) {
+       const aceptarBtn2 = page.locator('.q-dialog--modal').locator('button', { hasText: /^Aceptar$/ }).first();
+       if (await aceptarBtn2.count().catch(() => 0)) {
+         await aceptarBtn2.click({ timeout: 2000 }).catch(() => {});
+       }
+       modalVisible = await modal.isVisible().catch(() => false);
+       if (!modalVisible) await page.waitForTimeout(1500);
+     }
+     if (!modalVisible) throw new Error('Modal del reporte no se hizo visible a tiempo');
      const pdfButton = modal.locator('button').filter({ hasText: /^PDF$/ }).first();
      await pdfButton.click({ timeout: 90000 });
      const notif = page.locator('.q-notification.custom-notify-report').last();
