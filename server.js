@@ -180,6 +180,16 @@
      await togglePlate(page, plate);
      lastPlate = plate;
      await page.locator('button.lupa').click();
+
+        // A veces aparece un dialogo de error (ej. mapa/GPS) que bloquea el modal del reporte.
+        for (let i = 0; i < 6; i++) {
+          const aceptarBtn = page.locator('.q-dialog--modal').locator('button', { hasText: /^Aceptar$/ }).first();
+          if (await aceptarBtn.count().catch(() => 0)) {
+            await aceptarBtn.click({ timeout: 3000 }).catch(() => {});
+            break;
+          }
+          await page.waitForTimeout(1000);
+        }
      const modal = page.locator('.q-dialog--modal').filter({ has: page.locator('button', { hasText: /^PDF$/ }) }).first();
      await modal.waitFor({ state: 'visible', timeout: 90000 });
      const pdfButton = modal.locator('button').filter({ hasText: /^PDF$/ }).first();
