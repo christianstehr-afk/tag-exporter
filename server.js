@@ -180,7 +180,7 @@
      await togglePlate(page, plate);
      lastPlate = plate;
      await page.locator('button.lupa').click();
-     const modal = page.locator('.q-dialog--modal');
+     const modal = page.locator('.q-dialog--modal').filter({ has: page.locator('button', { hasText: /^PDF$/ }) }).first();
      await modal.waitFor({ state: 'visible', timeout: 90000 });
      const pdfButton = modal.locator('button').filter({ hasText: /^PDF$/ }).first();
      await pdfButton.click({ timeout: 90000 });
