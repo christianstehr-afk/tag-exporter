@@ -199,10 +199,17 @@
      } catch (plateErr) {
      console.error(`[export] ${plate} fallo:`, plateErr);
      try {
-       const shot = await page.screenshot({ fullPage: true });
-       archive.append(shot, { name: `TAG_${plate}_DEBUG.png` });
-     } catch (shotErr) {
-       console.error(`[export] no se pudo capturar screenshot de ${plate}:`, shotErr);
+       const diag = await page.evaluate(() => {
+         const modals = Array.from(document.querySelectorAll('.q-dialog--modal')).map(m => ({
+           visible: !!(m.offsetWidth || m.offsetHeight || m.getClientRects().length),
+           buttons: Array.from(m.querySelectorAll('button')).map(b => b.textContent.trim()),
+         }));
+         const notif = Array.from(document.querySelectorAll('.q-notification')).map(n => n.textContent.trim().slice(0, 80));
+         return { url: location.href, modalCount: modals.length, modals, notif };
+       });
+       console.log(`[export] ${plate} diag:`, JSON.stringify(diag));
+     } catch (diagErr) {
+       console.error(`[export] ${plate} diag fallo:`, diagErr.message);
      }
      archive.append(String(plateErr.message || plateErr), { name: `TAG_${plate}_ERROR.txt` });
      }
