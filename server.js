@@ -192,7 +192,7 @@
         }
      const modal = page.locator('.q-dialog--modal').filter({ has: page.locator('button', { hasText: /^PDF$/ }) }).first();
      let modalVisible = false;
-     for (let i = 0; i < 60 && !modalVisible; i++) {
+     for (let i = 0; i < 200 && !modalVisible; i++) {
        const aceptarBtn2 = page.locator('.q-dialog--modal').locator('button', { hasText: /^Aceptar$/ }).first();
        if (await aceptarBtn2.count().catch(() => 0)) {
          await aceptarBtn2.click({ timeout: 2000 }).catch(() => {});
@@ -204,7 +204,7 @@
      const pdfButton = modal.locator('button').filter({ hasText: /^PDF$/ }).first();
      await pdfButton.click({ timeout: 90000 });
      const notif = page.locator('.q-notification.custom-notify-report').last();
-     await notif.waitFor({ state: 'visible', timeout: 60000 });
+     await notif.waitFor({ state: 'visible', timeout: 90000 });
      const descargarBtn = notif.locator('button').filter({ hasText: /^Descargar$/ }).first();
      const [download] = await Promise.all([
        page.waitForEvent('download', { timeout: 30000 }),
